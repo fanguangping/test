@@ -1,42 +1,47 @@
-泛语言（Funny Language）
-===================================
+# funnyos
 
-泛语言，又称范语言。是一种格式自由（free style）的程式语言。这里的“格式自由”，是相对的自由，而不是绝对自由。格式自由意味着可以自定义函数的语法格式，这种语法格式看起来就像我们说话一样自然。  
-    
-泛语言并不直接将代码转换为机器语言，而是将Lisp语言作为其中间语言。这么做的理由是“变化的语言”需要以一种“不变的语言”作为基础，这样才能以不变应万变。  
-    
-泛语言采用的是一种带参数的DFA技术。为什么是DFA，而不是NFA？那是因为DFA没有二义性，所以易于处理，而NFA需要转换为DFA，这种转换在带参数的情况下显得更加困难，完全没有必要。所以在定义语法模板的时候，必须原生就是DFA的。  
-    
-下面是泛语言在ubuntu上运行的一个示例：  
 
-    fgp@ubuntu-desktop:~/funny$ ./funny
-    Welcome to FUNNY programming world. Type {exit} to exit.
-    > {define function {qsum}:
-      {the sum of squares {a} and {b}} as
-        {{{a}*{a}}+{{b}*{b}}}}
-    ok
-    > {the sum of squares {2} and {3}}
-    13
-    > {define function {abs}: 
-      {the absolute value of {x}} as 
-        {for the conditions: 
-           when {{x}>{0}} then {x},
-           when {{x}={0}} then {0},
-           when {{x}<{0}} then {-{x}}}}
-    ok
-    > {the absolute value of {-2}}
-    2
-    > {the sum of squares {2} and {the absolute value of {-2}}}
-    8
-    > {the absolute value of {the sum of squares {2} and {-3}}}
-    13
-    > {exit}
-    fgp@ubuntu-desktop:~/funny$ 
+----------
 
-希望大家能喜欢上这么语言，并带动它发展！  
-    
-联系方式：
-===================================
-    qq群：111086164  
-    邮箱：fguangping@gmail.com  
 
+标签（空格分隔）： OS OperatingSystem MIPS scheme funny
+
+
+---
+
+
+**简介**
+
+
+----------
+
+
+funnyos（泛语言操作系统）是一种以MIPS指令集为基础，使用scheme语言编写的操作系统。目前处于实验的初步阶段。
+
+
+----------
+
+
+**开发所需的背景知识**
+
+
+----------
+
+目前多数操作系统内核都是以C语言写成的，因其轻巧高效易于嵌入。但是这并不代表只有C语言可以写操作系统。本项目计划用scheme语言来编写操作系统，它并非完全遵循rnrs标准，而是经过深思熟虑而改写的一个变种。为了使该项目的开发者能够达成共识，我们就funnyos开发所需的知识做一下梳理。
+
+ 1. 依赖的硬件
+    本项目以MIPS指令集为基础，为了使funnyos能够不依赖于具体的硬件执行，使用java语言编写一个MIPS的虚拟机，具体知识请移步本空间的另一个项目：funnymachine，该项目同时包含汇编器
+ 2. MIPS指令集
+    MIPS指令集与汇编语言知识可参考《计算机组成与设计-硬件软件接口》一书
+ 3. scheme语言变种funny-scheme
+    funnyos所需的scheme语言演变至热r5rs标准，变动的地方主要有这么几点：
+    a) 不解析所有的类型，而是改为部分类型对字符串做解析，例如，(define var 1.23)需改写为(define var (lex 3 "1.23"))
+    b) 不使用宏
+ 4. 使用MIPS汇编器编写funny-scheme语言编译器
+    可以参考项目[EMECHS-Scheme][1]
+ 5. 使用funny-scheme编写funnyos操作系统
+    编写操作系统的知识可参考《Orange'S:一个操作系统的实现》和《30天自制操作系统》这两本书，以及minix系统的源码
+ 6. 应用层语言funny
+    funny是一种基于funny-scheme的宏语言，版本规范可参考。。。
+
+  [1]: https://github.com/Schol-R-LEA/EMECHS-Scheme
