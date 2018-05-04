@@ -1,6 +1,12 @@
 
 https://stackoverflow.com/questions/11951646/setrgb-in-java
 
+http://www.comp.nus.edu.sg/~cs2100/2_resources/AppendixA_Graphics_and_Computing_GPUs.pdf
 
+http://www.cs.colostate.edu/~malaiya/470/Appendix-D.pdf
 
+http://booksite.elsevier.com/9780124077263/downloads/advance_contents_and_appendices/appendix_E.pdf
 
+https://news.ycombinator.com/item?id=8714988
+
+quote, atom, eq, cond, cons, car, cdr, label, and lambda
