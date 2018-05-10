@@ -15,3 +15,13 @@ http://blog.jobbole.com/96225/
 
 https://github.com/cjl3080434008/2014/blob/master/read_book/%E3%80%8A%E9%93%BE%E6%8E%A5%E5%99%A8%E5%92%8C%E5%8A%A0%E8%BD%BD%E5%99%A8%E3%80%8B%E4%B8%AD%E8%AF%91%E6%9C%AC.pdf
 
+http://www.cnblogs.com/oubo/archive/2011/12/06/2394631.html
+(load <file> <start-address>)
+(link <config-file> <out-file>)
+
+gpu
+(screen-draw)
+(screen-width)
+(screen-height)
+(get-color <row> <column>)
+(set-color <row> <column> <rgb>)
