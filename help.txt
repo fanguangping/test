@@ -30,3 +30,7 @@ gpu
 
 https://bbs.pku.edu.cn/v2/collection.php?path=groups%2FGROUP_4%2FLinux%2FD8EAF4BC6%2FDBD8A58A6%2FD684DA483%2FD9942CEFF
 
+https://github.com/smahasankabir/OSTEP
+
+https://github.com/timkchan/mipsAssemblerLinker
+
