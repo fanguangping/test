@@ -19,4 +19,6 @@
 			(else ()))))
 ;
 
+(define-generic move-resource)
+(define-method (move-resource (s "Register"@00) (t "Register"@00)) (...))
 
