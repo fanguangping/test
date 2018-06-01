@@ -185,6 +185,8 @@ solution(Persons) :-
 	}
 ==========================================================================
 
+http://tuprolog.sourceforge.net/doc/2p-guide.pdf
+
 
 
 
