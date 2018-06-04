@@ -187,6 +187,6 @@ solution(Persons) :-
 
 http://tuprolog.sourceforge.net/doc/2p-guide.pdf
 
-
+http://amsacta.unibo.it/3451/1/tuprolog-guide.pdf
 
 
