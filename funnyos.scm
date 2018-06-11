@@ -63,3 +63,36 @@
 
 
 
+(define *paren-left*     "(")
+(define *paren-right*    ")")
+(define *bracket-left*   "[")
+(define *bracket-right*  "]")
+(define *brace-left*     "{")
+(define *brace-right*    "}")
+
+(define *nil-macro*   "nil")
+(define *M-SystemMacro-eval*  1)
+
+(define (MAKE-SystemMacro self name function mapping-string run-string eval-string)
+  (define (nil-macro? string) (eq? string *nil-macro*))
+  (lambda (message)
+    (case message
+      ((*M-SystemMacro-eval*)
+       (lambda ()
+         (cond ((nil-macro? mapping-string) (+ 1 2))
+               ((nil-macro? run-string) (+ 1 2))
+               ((nil-macro? eval-string) (+ 1 2))
+               (else (+ 1 2)))))
+      (else (+ 1 2)))))
+
+(define (parse-macro macro-string replacements)
+  ())
+;
+
+
+
+
+
+
+
+
