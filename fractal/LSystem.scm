@@ -4,13 +4,14 @@
 (require racket/file)
 (require mrlib/path-dialog)
 
-(define stack (list))
+(define stack '())
 (define (push stack element)
-  (set! stack (cons element stack)))
-(define (pop stack)
-  (let ((element (car stack)))
-    (set! stack (cdr stack))
-    element))
+  (set! stack (append (list element) stack)))
+(define (pop stack cur)
+  (if (null? stack) cur
+      (let ((element (car stack)))
+        (set! stack (cdr stack))
+        element)))
 
 ;(define rules
 ;  '(("F"  . "F[-F]F[+F]F")))
@@ -24,8 +25,8 @@
 ;    (startY     . 100 )))
 
 
-(define x 100)
-(define y 100)
+(define x 400)
+(define y 400)
 (define angle 0)
 
 (define (get-assoc-value alist key)
@@ -35,10 +36,11 @@
       p))
 
 (define (expand-once actions-string rules)
+  ;(display actions-string)
+  ;(display #\newline)
   (string-append* (map (lambda (s)
-                         (display s)
                          (define rule (get-assoc-value rules s))
-                         (if (null? rule) (list->string (list s))
+                         (if (not rule) (list->string (list s))
                              rule))
                        (string->list actions-string))))
 
@@ -58,15 +60,15 @@
   (define file-path (get-file "open fractal config file" main-frame))
   (define config (generate-actions file-path))
   (if file-path
-      (draw-fractal (send canvas get-dc) (cdr config) (car config))
+      (draw-fractal (send canvas get-dc) (string->list (cdr config)) (car config))
       '()))
 
-(define draw-fractal
-  (lambda (dc actions config)
-    (if (null? actions) '()
-        (begin
-          (perform dc (car actions) config)
-          (draw-fractal dc (cdr actions) config)))))
+(define (draw-fractal dc actions config)
+  ;(display actions)
+  (if (null? actions) '()
+      (begin
+        (perform dc (car actions) config)
+        (draw-fractal dc (cdr actions) config))))
 
 (define (perform dc action config)
   (define lineLength (get-assoc-value config 'lineLength))
@@ -82,15 +84,15 @@
     ((eq? action #\+)
      (set! angle (+ angle theAngle)))
     ((eq? action #\-)
-     (set! angle (- angle theAngle))))
+     (set! angle (- angle theAngle)))
     ((eq? action #\[)
      (push stack x)
      (push stack y)
      (push stack angle))
     ((eq? action #\])
-     (set! angle (pop stack))
-     (set! y (pop stack))
-     (set! x (pop stack))))
+     (set! angle (pop stack angle))
+     (set! y (pop stack y))
+     (set! x (pop stack x)))))
 
 
 (define main-frame
