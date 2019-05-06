@@ -1,137 +1,76 @@
 #lang racket
-(require racket/gui)
+
+(provide (all-defined-out))
+
 (require racket/draw)
-(require racket/file)
-(require mrlib/path-dialog)
+(require "common.scm")
 
-(define stack '())
-(define (push stack element)
-  (set! stack (append (list element) stack)))
-(define (pop stack cur)
-  (if (null? stack) cur
-      (let ((element (car stack)))
-        (set! stack (cdr stack))
-        element)))
+(define (draw-by-LSystem canvas config)
+  (define *axiom* '())
+  (define *angle* '())
+  (define *line-length* '())
+  (define *iteration* '())
+  (define *start-x* '())
+  (define *start-y* '())
+  (define *start-angle* '())
+  (define *rules* '())
+  (define (load-config config)
+    (set! *axiom* (get-assoc-value config 'axiom))
+    (set! *angle* (get-assoc-value config 'angle))
+    (set! *line-length* (get-assoc-value config 'line-length))
+    (set! *iteration* (get-assoc-value config 'iteration))
+    (set! *start-x* (get-assoc-value config 'start-x))
+    (set! *start-y* (get-assoc-value config 'start-y))
+    (set! *start-angle* (get-assoc-value config 'start-angle))
+    (set! *rules* (get-assoc-value config 'rules)))
+  
+  (define x 0)
+  (define y 0)
+  (define angle 0)
+  (define stack '())
+  (define (expand-once actions-string)
+    (string-append* (map (lambda (s)
+                           (define rule (get-assoc-value *rules* s))
+                           (if (not rule) (list->string (list s))
+                               rule))
+                         (string->list actions-string))))
 
-;(define rules
-;  '(("F"  . "F[-F]F[+F]F")))
-;
-;(define parameters
-;  '((axiom      . "F" )
-;    (angle      . 60  )
-;    (lineLength . 4   )
-;    (iteration  . 4   )
-;    (startX     . 100 )
-;    (startY     . 100 )))
+  (define (expand actions-string iteration)
+    (if (<= iteration 0) actions-string
+        (expand (expand-once actions-string) (- iteration 1))))
 
+  (define (generate-actions file-path)
+    (expand *axiom* *iteration*))
+  (define (draw-fractal dc actions)
+    (if (null? actions) '()
+        (begin
+          (perform dc (car actions))
+          (draw-fractal dc (cdr actions)))))
 
-(define x 400)
-(define y 400)
-(define angle 0)
+  (define (perform dc action)
+    (cond
+      ((eq? action #\F)
+       (send dc draw-lines
+             (list (cons x y)
+                   (cons (+ x (* *line-length* (sin (degrees->radians angle))))
+                         (+ y (* *line-length* (cos (degrees->radians angle)))))))
+       (set! x (+ x (* *line-length* (sin (degrees->radians angle)))))
+       (set! y (+ y (* *line-length* (cos (degrees->radians angle))))))
+      ((eq? action #\+)
+       (set! angle (+ angle *angle*)))
+      ((eq? action #\-)
+       (set! angle (- angle *angle*)))
+      ((eq? action #\[)
+       (push! stack x)
+       (push! stack y)
+       (push! stack angle))
+      ((eq? action #\])
+       (set! angle (pop! stack angle))
+       (set! y (pop! stack y))
+       (set! x (pop! stack x)))))
+  (load-config config)
+  (set! x *start-x*)
+  (set! y *start-y*)
+  (set! angle *start-angle*)
+  (draw-fractal (send canvas get-dc) (string->list (cdr config)) (car config)))
 
-(define (get-assoc-value alist key)
-  (define p (assoc key alist))
-  (if (pair? p)
-      (cdr p)
-      p))
-
-(define (expand-once actions-string rules)
-  ;(display actions-string)
-  ;(display #\newline)
-  (string-append* (map (lambda (s)
-                         (define rule (get-assoc-value rules s))
-                         (if (not rule) (list->string (list s))
-                             rule))
-                       (string->list actions-string))))
-
-(define (expand actions-string rules iteration)
-  (if (<= iteration 0) actions-string
-      (expand (expand-once actions-string rules) rules (- iteration 1))))
-
-(define (generate-actions file-path)
-  (define config-string (file->string file-path))
-  (define config (eval (read (open-input-string config-string))))
-  (cons config
-        (expand (get-assoc-value config 'axiom)
-                (get-assoc-value config 'rules)
-                (get-assoc-value config 'iteration))))
-
-(define (draw menu-item event)
-  (define file-path (get-file "open fractal config file" main-frame))
-  (define config (generate-actions file-path))
-  (if file-path
-      (draw-fractal (send canvas get-dc) (string->list (cdr config)) (car config))
-      '()))
-
-(define (draw-fractal dc actions config)
-  ;(display actions)
-  (if (null? actions) '()
-      (begin
-        (perform dc (car actions) config)
-        (draw-fractal dc (cdr actions) config))))
-
-(define (perform dc action config)
-  (define lineLength (get-assoc-value config 'lineLength))
-  (define theAngle (get-assoc-value config 'angle))
-  (cond
-    ((eq? action #\F)
-     (send dc draw-lines
-           (list (cons x y)
-                 (cons (+ x (* lineLength (sin (degrees->radians angle))))
-                       (+ y (* lineLength (cos (degrees->radians angle)))))))
-     (set! x (+ x (* lineLength (sin (degrees->radians angle)))))
-     (set! y (+ y (* lineLength (cos (degrees->radians angle))))))
-    ((eq? action #\+)
-     (set! angle (+ angle theAngle)))
-    ((eq? action #\-)
-     (set! angle (- angle theAngle)))
-    ((eq? action #\[)
-     (push stack x)
-     (push stack y)
-     (push stack angle))
-    ((eq? action #\])
-     (set! angle (pop stack angle))
-     (set! y (pop stack y))
-     (set! x (pop stack x)))))
-
-
-(define main-frame
-  (new frame%
-       [label "分形"]
-       [width 800]
-       [height 600]
-       [border 5]))
-
-(define panel-canvas
-  (new vertical-panel%
-       [parent main-frame]
-       [style '(border)]
-       [alignment '(left top)]
-       [border 10]))
-
-(define canvas
-  (new canvas%
-       [parent panel-canvas]))
-
-(define menubar
-  (new menu-bar%
-       [parent main-frame]))
-
-(define menu-file
-  (new menu%
-       [label "文件"]
-       [parent menubar]))
-(define menu-item-open
-  (new menu-item%
-       [label "打开"]
-       [parent menu-file]
-       [callback draw]))
-(define menu-item-exit
-  (new menu-item%
-       [label "退出"]
-       [parent menu-file]
-       [callback
-        (lambda (item event)
-          (send main-frame on-exit))]))
-
-(send main-frame show #t)
