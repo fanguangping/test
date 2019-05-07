@@ -10,9 +10,8 @@
 (define (draw menu-item event)
   (define file-path (get-file "open fractal config file" main-frame))
   (define config (read-config file-path))
-  (send canvas refresh)
   (cond
-    ((equal? (path-get-extension file-path) ".ls")
+    ((equal? (path-get-extension file-path) #".ls")
      (draw-by-LSystem canvas config))
     (else "Not valid file!")))
 

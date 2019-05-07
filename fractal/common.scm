@@ -24,6 +24,9 @@
 (define (pop! stack)
   (stack 'pop!))
 
+(define (stack-empty? stack)
+  (null? (stack 'stack)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; read config
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
