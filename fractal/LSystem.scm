@@ -23,11 +23,9 @@
     (set! *start-y* (get-assoc-value config 'start-y))
     (set! *start-angle* (get-assoc-value config 'start-angle))
     (set! *rules* (get-assoc-value config 'rules)))
-
   (define stack (make-stack))
   (define current-state '())
   (define point '())
-
   (define (next-point p angle)
     (cons (+ (car p) (* *line-length* (sin (degrees->radians angle))))
           (+ (cdr p) (* *line-length* (cos (degrees->radians angle))))))
@@ -37,7 +35,6 @@
                            (if (not rule) (list->string (list s))
                                rule))
                          (string->list actions-string))))
-
   (define (expand actions-string iteration)
     (if (<= iteration 0) actions-string
         (expand (expand-once actions-string) (- iteration 1))))
@@ -63,7 +60,6 @@
         (begin
           (perform-draw dc (car actions))
           (draw-fractal dc (cdr actions)))))
-
   (load-config config)
   (set! current-state (cons (cons *start-x* *start-y*) *start-angle*))
   (draw-fractal (send canvas get-dc) (string->list (generate-actions))))

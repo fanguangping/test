@@ -4,6 +4,7 @@
 (require racket/file)
 (require "common.scm")
 (require "LSystem.scm")
+(require "IFS.scm")
 
 ; https://blog.csdn.net/chinazhangyong/article/details/79362394
 
@@ -13,6 +14,8 @@
   (cond
     ((equal? (path-get-extension file-path) #".ls")
      (draw-by-LSystem canvas config))
+    ((equal? (path-get-extension file-path) #".ifs")
+     (draw-by-ifs canvas config))
     (else "Not valid file!")))
 
 (define main-frame
