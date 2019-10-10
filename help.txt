@@ -36,3 +36,8 @@ https://github.com/timkchan/mipsAssemblerLinker
 
 https://github.com/MonkSunBoy/DOC/blob/master/erlang/Erlang%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1(%E7%AC%AC2%E7%89%88).pdf
 http://down.51cto.com/data/2060205
+
+https://blog.csdn.net/new_ke_2014/article/details/22200943
+https://mathcubic.org/article/article/index/id/499/cid/29.html
+https://blog.csdn.net/Terry__J/article/details/7395683
+https://math.stackexchange.com/questions/5877/efficiently-finding-two-squares-which-sum-to-a-prime
