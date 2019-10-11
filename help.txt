@@ -41,3 +41,6 @@ https://blog.csdn.net/new_ke_2014/article/details/22200943
 https://mathcubic.org/article/article/index/id/499/cid/29.html
 https://blog.csdn.net/Terry__J/article/details/7395683
 https://math.stackexchange.com/questions/5877/efficiently-finding-two-squares-which-sum-to-a-prime
+http://nonagon.org/ExLibris/fermat-sum-two-squares-calculator
+https://lyric.im/quick-primality-test
+http://www.nowamagic.net/librarys/veda/detail/2329
